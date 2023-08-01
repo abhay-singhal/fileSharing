@@ -3,12 +3,12 @@ const { getMaxListeners } = require("../models/file");
 
 async function sendMail({ from, to, subject, text, html }) {
   let transporter = nodemailer.createTransport({
-    host: "smtp-relay.sendinblue.com",
+    host: process.env.SMTP_HOST,
     port: 587,
     secure: false,
     auth: {
-      user: "singhalabhay19@gmail.com",
-      pass: "RGX8QW4JNSIgrzCT",
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASSWORD,
     },
   });
 

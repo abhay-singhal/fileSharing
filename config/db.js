@@ -8,7 +8,7 @@ const connectDB = () => {
       useUnifiedTopology: true,
       useFindAndModify: true,
     })
-    .then("once", () => {
+    .then("data", () => {
       console.log("DB Connected");
     })
     .catch((err) => {

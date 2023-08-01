@@ -3,7 +3,6 @@ const multer = require("multer");
 const path = require("path");
 const File = require("../models/file");
 const { v4: uuidv4 } = require("uuid");
-// const File = require('../models/file');
 
 let storage = multer.diskStorage({
   destination: (req, file, cb) => cb(null, "uploads/"),
@@ -17,7 +16,7 @@ let storage = multer.diskStorage({
 
 let upload = multer({ storage, limits: { fileSize: 1000000 * 100 } }).single(
   "myfile"
-); //100mb
+); 
 
 router.post("/", (req, res) => {
   upload(req, res, async (err) => {
@@ -31,7 +30,7 @@ router.post("/", (req, res) => {
       size: req.file.size,
     });
     const response = await file.save();
-    res.json({ file: `http://localhost:3000/files/${response.uuid}` });
+    res.json({ file: `${process.env.APP_BASE_URL}/files/${response.uuid}` });
   });
 });
 
@@ -57,7 +56,7 @@ router.post("/send", async (req, res) => {
       text: `${emailFrom} shared a file`,
       html: require('../services/emailTemplate')({
         emailFrom : emailFrom, 
-        dowloadlink: `${process.env.APP_URL}/files/${file.uuid}`,
+        dowloadlink: `${process.env.APP_BASE_URL}/files/${file.uuid}`,
         size: parseInt(file.size/1000)+'KB',
         expired: '24 Hours'
       })
