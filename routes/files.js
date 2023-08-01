@@ -43,7 +43,7 @@ router.post("/send", async (req, res) => {
   const file = await File.findOne({ uuid: uuid });
   if (file.sender) {
     return res.status(422).send({ error: "Email already sent" });
-
+  }
     file.sender = emailFrom;
     file.receiver = emailTo;
     const response = await file.save();
@@ -60,9 +60,13 @@ router.post("/send", async (req, res) => {
         size: parseInt(file.size/1000)+'KB',
         expired: '24 Hours'
       })
+    }).then(()=>{
+      return res.json({success:true});
+    }).catch(err =>{
+      return res.status(500).json({error: 'Error in email sending'});
     });
     return res.status(500);
-  }
+  
 });
 
 module.exports = router;
